@@ -17,6 +17,7 @@ class MessageProvider extends ChangeNotifier {
 
     var message = Message(
       uid: FirebaseAuth.instance.currentUser!.uid,
+      name: FirebaseAuth.instance.currentUser!.displayName ?? "Anònim",
       content: content,
       dateTime: DateTime.now(),
     );

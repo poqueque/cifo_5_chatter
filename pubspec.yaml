@@ -7,9 +7,11 @@ environment:
   sdk: ^3.9.2
 
 dependencies:
+  chat_bubbles: ^1.7.0
   cloud_firestore: ^6.1.0
   firebase_auth: ^6.1.1
   firebase_core: ^4.2.0
+  firebase_storage: ^13.0.4
   firebase_ui_auth: ^3.0.1
   firebase_ui_localizations: ^2.0.1
   flutter:
@@ -18,6 +20,7 @@ dependencies:
     sdk: flutter
   flutter_ui_auth: ^1.0.0
   google_fonts: ^6.3.2
+  image_picker: ^1.2.0
   provider: ^6.1.5+1
 
 dev_dependencies:
