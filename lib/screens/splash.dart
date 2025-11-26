@@ -1,6 +1,7 @@
 import 'package:chatter/screens/chat_home.dart';
 import 'package:chatter/styles/app_styles.dart';
 import 'package:firebase_auth/firebase_auth.dart' hide EmailAuthProvider;
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -37,10 +38,30 @@ class _SplashState extends State<Splash> {
     );
   }
 
-  void init() {
+  Future<void> init() async {
+    //Configuracio de Push Notifications
+    final fmToken = await FirebaseMessaging.instance.getToken();
+    debugPrint("Token: $fmToken");
+
+    final notificationSettings = await FirebaseMessaging.instance
+        .requestPermission();
+
+    if (notificationSettings.authorizationStatus ==
+        AuthorizationStatus.authorized) {
+      debugPrint("Permisos autoritats");
+    } else {
+      debugPrint("No autoritzats");
+    }
+
+    FirebaseMessaging.onMessage.listen(foregroundMessageReceived);
+
+    FirebaseMessaging.instance.subscribeToTopic("test");
+
+    // Configuració de Authentication
     User? user = FirebaseAuth.instance.currentUser;
     final providers = [EmailAuthProvider()];
 
+    if (!mounted) return;
     if (user == null) {
       debugPrint("Usuari no loginat");
       //Login
@@ -75,5 +96,11 @@ class _SplashState extends State<Splash> {
         MaterialPageRoute(builder: (context) => ChatHome()),
       );
     }
+  }
+
+  void foregroundMessageReceived(RemoteMessage event) {
+    debugPrint(
+      "Rebut un missatge mentre la app estava en Foreground: ${event.notification?.body ?? "No data"}",
+    );
   }
 }
